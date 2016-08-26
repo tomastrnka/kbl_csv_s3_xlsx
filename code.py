@@ -11,7 +11,7 @@ with open('/data/config.json') as jsonFile:
     
 if data["parameters"]["#S3key"] == '' or data["parameters"]["#S3secretKey"] == '' or data["parameters"]["bucketName"] == '':
     print " === config json parameters empty ==="
-    sys.exit()
+    sys.exit(1)
 
 if __name__ == '__main__':
     listOfFiles = glob.glob("/data/in/tables/*.csv")
