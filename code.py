@@ -6,6 +6,13 @@ import tinys3
 import time
 import json
 
+with open('/data/config.json') as jsonFile:
+    data = json.load(jsonFile)
+    
+if data["parameters"]["#S3key"] == '' || data["parameters"]["#S3secretKey"] == '' || data["parameters"]["bucketName"] == '':
+    print " === config json parameters empty ==="
+    sys.exit()
+
 if __name__ == '__main__':
     listOfFiles = glob.glob("/data/in/tables/*.csv")
     for index, fileInList in enumerate(listOfFiles):
@@ -21,10 +28,9 @@ if __name__ == '__main__':
     excelFile.close()
     print " === conversion is done ==="
     
-with open('/data/config.json') as jsonFile:
-    data = json.load(jsonFile)
 
-conn = tinys3.Connection(data["parameters"]["S3key"],data["parameters"]["S3secretKey"])
+
+conn = tinys3.Connection(data["parameters"]["#S3key"],data["parameters"]["#S3secretKey"])
 listOfFiles2 = glob.glob("/data/in/tables/*.xlsx")
 for file in listOfFiles2:
     temp = os.path.splitext(file[16:len(file)])
