@@ -9,7 +9,7 @@ import json
 with open('/data/config.json') as jsonFile:
     data = json.load(jsonFile)
     
-if data["parameters"]["#S3key"] == '' || data["parameters"]["#S3secretKey"] == '' || data["parameters"]["bucketName"] == '':
+if data["parameters"]["#S3key"] == '' or data["parameters"]["#S3secretKey"] == '' or data["parameters"]["bucketName"] == '':
     print " === config json parameters empty ==="
     sys.exit()
 
