@@ -8,7 +8,7 @@ import json
 
 with open('/data/config.json') as jsonFile:
     data = json.load(jsonFile)
-    
+
 if data["parameters"]["#S3key"] == '' or data["parameters"]["#S3secretKey"] == '' or data["parameters"]["bucketName"] == '':
     print " === config json parameters empty ==="
     sys.exit(1)
@@ -23,15 +23,15 @@ if __name__ == '__main__':
             content = csv.reader(f)
             for index_row, data_in_row in enumerate(content):
                 for index_col, data_in_cell in enumerate(data_in_row):
-                    if data_in_cell == '':
-                        worksheet.write_blank(index_row, index_col, None)    
-                    elif type(data_in_cell) == int or type(data_in_cell) == float and data_in_cell != ' ' :
+                    if data_in_cell == ' ':
+                        worksheet.write_blank(index_row, index_col, None)
+                    elif (type(data_in_cell) == int or type(data_in_cell) == float) and data_in_cell != ' ' :
                         worksheet.write_number(index_row, index_col, data_in_cell)
-                    else: 
+                    else:
                         worksheet.write(index_row, index_col, unicode(data_in_cell))
     excelFile.close()
     print " === conversion is done ==="
-    
+
 
 
 conn = tinys3.Connection(data["parameters"]["#S3key"],data["parameters"]["#S3secretKey"])
