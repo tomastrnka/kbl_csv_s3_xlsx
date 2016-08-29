@@ -20,7 +20,8 @@ if __name__ == '__main__':
         excelFile = xlsxwriter.Workbook(fileName + '.xlsx')
         worksheet = excelFile.add_worksheet()
         with open(fileInList, 'rb') as f:
-            content = csv.reader(f)
+            datadecode = f.decode("utf8")
+            content = csv.reader(datadecode)
             for index_row, data_in_row in enumerate(content):
                 for index_col, data_in_cell in enumerate(data_in_row):
                     worksheet.write(index_row, index_col, data_in_cell)
