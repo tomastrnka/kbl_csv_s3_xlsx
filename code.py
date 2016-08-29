@@ -23,9 +23,11 @@ if __name__ == '__main__':
             content = csv.reader(f)
             for index_row, data_in_row in enumerate(content):
                 for index_col, data_in_cell in enumerate(data_in_row):
-                    if data_in_cell=='':
+                    if data_in_cell == '':
                         worksheet.write_blank(index_row, index_col, None)    
-                    else:
+                    elif type(data_in_cell) == int or type(data_in_cell) == float and data_in_cell != ' ' :
+                        worksheet.write_number(index_row, index_col, data_in_cell)
+                    else: 
                         worksheet.write(index_row, index_col, unicode(data_in_cell))
     excelFile.close()
     print " === conversion is done ==="
