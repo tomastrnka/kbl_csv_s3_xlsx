@@ -23,7 +23,7 @@ if __name__ == '__main__':
             content = csv.reader(f)
             for index_row, data_in_row in enumerate(content):
                 for index_col, data_in_cell in enumerate(data_in_row):
-                    worksheet.write(index_row, index_col, data_in_cell)
+                    worksheet.write(index_row, index_col, repr(data_in_cell))
 
     excelFile.close()
     print " === conversion is done ==="
