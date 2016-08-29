@@ -26,7 +26,7 @@ if __name__ == '__main__':
                     if data_in_cell=='':
                         worksheet.write_blank(index_row, index_col, None)    
                     else:
-                        worksheet.write(index_row, index_col, data_in_cell)
+                        worksheet.write(index_row, index_col, unicode(data_in_cell))
     excelFile.close()
     print " === conversion is done ==="
     
