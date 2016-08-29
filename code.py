@@ -5,6 +5,7 @@ import xlsxwriter
 import tinys3
 import time
 import json
+import codecs
 
 with open('/data/config.json') as jsonFile:
     data = json.load(jsonFile)
@@ -19,7 +20,7 @@ if __name__ == '__main__':
         fileName  = fileInList[0:fileInList.find('.')]
         excelFile = xlsxwriter.Workbook(fileName + '.xlsx')
         worksheet = excelFile.add_worksheet()
-        with open(fileInList, 'rb', 'utf-8') as f:
+        with codecs.open(fileInList, 'rb', encoding='utf-8') as f:
             content = csv.reader(f)
             for index_row, data_in_row in enumerate(content):
                 for index_col, data_in_cell in enumerate(data_in_row):
