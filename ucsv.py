@@ -1,43 +1,10 @@
-# ucsv - a drop-in extension of CSV module to read and write Unicode files
-
-'''
-
-A drop-in extension of CSV module to read and write Unicode files
-
-ABSTRACT
-
-    The standard CSV module can read/parse and write standard ASCII
-    files with comma-separated values (CSV).  This module is an
-    extension/wrapper to read and write comma-separated value files in
-    UTF-8 or other encodings.
-
-    Much of the code is stolen from an example in the 2.5.2 Python
-    Library Reference, with additional wrappers for Unicode-ready
-    DictReader, DictWriter.  In addition, the reader tries to turn
-    things that look like numbers into actual numerical values, and
-    interpolates non-strings into strings suitable for the writer.
-
-    This is a "drop in" extension for the normal CSV module.
-
-SYNOPSIS
-
-    >>> import ucsv as csv
-
-AUTHOR
-
-    Ed Halley (ed@halley.cc) 18 August 2009
-
-'''
-
-#----------------------------------------------------------------------------
-
 import csv ; from csv import *
 
 __version__ = '1.0 Unicode'
 __dropins__ = [ 'reader', 'writer', 'DictReader', 'DictWriter' ]
 
 import codecs
-import cStringIO
+import re
 
 class UTF8Recoder:
     '''Iterator that reads a stream encoded in any given encoding.
@@ -57,16 +24,33 @@ class reader:
     from content in the optional encoding.
     '''
 
+
+
     def __init__(self, f, dialect=csv.excel, encoding="utf-8", **kwds):
         f = UTF8Recoder(f, encoding)
         self.reader = csv.reader(f, dialect=dialect, **kwds)
 
     def value(self, s):
-	try: return int(s)
-	except: pass
-	try: return float(s)
-	except: pass
-	return unicode(s, "utf-8")
+        numberRegex = re.compile(r'^[0]+\d+')
+
+        try:
+            results  = numberRegex.search(s)
+            try:
+
+                return unicode(results.group(), "utf-8")
+            except:
+                pass
+
+            if int(s) == int('inf'):
+                return unicode(s.replace(" ", ""), "utf-8")
+            return int(s)
+        except: pass
+        try:
+            if float(s) == float('inf'):
+                return unicode(s, "utf-8")
+            return float(s)
+        except: pass
+        return unicode(s.replace(" ", ""), "utf-8")
 
     def next(self):
         row = self.reader.next()
@@ -93,7 +77,7 @@ class writer:
         data = self.queue.getvalue()
         data = data.decode("utf-8")
         # ... and reencode it into the target encoding
-	self.encoder.write(data)
+        self.encoder.write(data)
         # empty queue
         self.queue.truncate(0)
 
@@ -139,18 +123,17 @@ class DictWriter:
         self.fieldnames = fieldnames    # list of keys for the dict
         self.restval = restval          # for writing short dicts
         if extrasaction.lower() not in ("raise", "ignore"):
-            raise ValueError, \
-                  ("extrasaction (%s) must be 'raise' or 'ignore'" %
+            raise ValueError("extrasaction (%s) must be 'raise' or 'ignore'" %
                    extrasaction)
         self.extrasaction = extrasaction
         self.writer = writer(f, dialect, *args, **kwds)
-	self.writer.writerow(fieldnames)
+        self.writer.writerow(fieldnames)
 
     def _dict_to_list(self, rowdict):
         if self.extrasaction == "raise":
             for k in rowdict.keys():
                 if k not in self.fieldnames:
-                    raise ValueError, "dict contains fields not in fieldnames"
+                    pass
         return [rowdict.get(key, self.restval) for key in self.fieldnames]
 
     def writerow(self, rowdict):
