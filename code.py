@@ -39,6 +39,6 @@ conn = tinys3.Connection(data["parameters"]["#S3key"],data["parameters"]["#S3sec
 listOfFiles2 = glob.glob("/data/in/tables/*.xlsx")
 for file in listOfFiles2:
     temp = os.path.splitext(file[16:len(file)])
-    print " === uploading " + temp[0]+'_'+time.strftime("%Y-%m-%d")+temp[1] + " ==="
-    conn.upload(temp[0]+'_'+time.strftime("%Y-%m-%d")+temp[1],open(file,'rb'),data["parameters"]["bucketName"])
-    print " === " + temp[0]+'_'+time.strftime("%Y-%m-%d")+temp[1] + " uploaded ==="
+    print " === uploading " + temp[0]+'_'+str(int(time.strftime("%V"))-1)+temp[1] + " ==="
+    conn.upload(temp[0]+'_'+str(int(time.strftime("%V"))-1)+temp[1],open(file,'rb'),data["parameters"]["bucketName"])
+    print " === " + temp[0]+'_'str(int(time.strftime("%V"))-1)+temp[1] + " uploaded ==="
