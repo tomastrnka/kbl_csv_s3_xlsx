@@ -16,22 +16,18 @@ if data["parameters"]["#S3key"] == '' or data["parameters"]["#S3secretKey"] == '
 
 if __name__ == '__main__':
     listOfFiles = glob.glob("/data/in/tables/*.csv")
-    list_of_indexes = []
+    list_of_indexes = [[]]
+    shet_names = ['sir', 'sir_company']
     for index, fileInList in enumerate(listOfFiles):
-        fileName  = fileInList[0:fileInList.find('.')]
-        excelFile = xlsxwriter.Workbook(fileName + '.xlsx')
-        worksheet = excelFile.add_worksheet()
         with open(fileInList, 'rb') as f:
             content = csv.reader(f)
             for index_row, data_in_row in enumerate(content):
                 for index_col, data_in_cell in enumerate(data_in_row):
-
                     if type(data_in_cell) == unicode  and index_row != 0:
-                        list_of_indexes.append(index_col)
-    excelFile.close()
-    list_of_indexes = dict.fromkeys(list_of_indexes).keys()
-    print " === indexes are saved  ==="
-    convert(list_of_indexes)
+                        list_of_indexes[index].append(index_col)
+                        list_of_indexes[index] = dict.fromkeys(list_of_indexes[index]).keys()
+            list_of_indexes.append([])
+            convert(list_of_indexes, sheet_names)
 
 
 
