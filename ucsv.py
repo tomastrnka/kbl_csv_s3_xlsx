@@ -32,12 +32,23 @@ class reader:
 
     def value(self, s):
         numberRegex = re.compile(r'^[0]+\d+')
+        numberFloatRegex = re.compile(r'^\d+E\d+')
 
         try:
             results  = numberRegex.search(s)
+
             try:
 
                 return unicode(results.group(), "utf-8")
+            except:
+                pass
+
+            try:
+                results2 = numberFloatRegex.search(s)
+            except:
+                pass
+            try :
+                return unicode(results2.group(), "utf-8")
             except:
                 pass
 
