@@ -13,7 +13,7 @@ def convert(list_of_indexes, sheet_names):
     
     excelFile = xlsxwriter.Workbook('sir' + '.xlsx')
     for index, fileInList in enumerate(listOfFiles):
-        worksheet = excelFile.add_worksheet(str(sheet_name[index]))
+        worksheet = excelFile.add_worksheet(str(sheet_names[index]))
         with open(fileInList, 'rb') as f:
             content = csv.reader(f)
             for index_row, data_in_row in enumerate(content):
