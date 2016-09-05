@@ -17,7 +17,9 @@ if data["parameters"]["#S3key"] == '' or data["parameters"]["#S3secretKey"] == '
 if __name__ == '__main__':
     listOfFiles = glob.glob("/data/in/tables/*.csv")
     list_of_indexes = [[]]
-    shet_names = ['sir', 'sir_company']
+    sheet_names = []
+    for fileName in listOfFiles:
+        sheet_names.append(fileName[16:-4])
     for index, fileInList in enumerate(listOfFiles):
         with open(fileInList, 'rb') as f:
             content = csv.reader(f)
